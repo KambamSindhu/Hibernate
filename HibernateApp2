@@ -1,0 +1,382 @@
+=============================
+pom.xml
+===========================
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.ait</groupId>
+  <artifactId>HibernateApplication</artifactId>
+  <version>1.1</version>
+
+  <name>HibernateApplication</name>
+  <!-- FIXME change it to the project's website -->
+  <url>http://www.example.com</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.release>11</maven.compiler.release>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>5.11.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- Optionally: parameterized tests support -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <scope>test</scope>
+    </dependency>
+    
+    
+      <!-- Hibernate Core Dependency -->
+     <dependency>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate-core</artifactId>
+    <version>5.3.1.Final</version>
+ 	 </dependency>
+  	<!-- Mysql Driver -->
+  	<dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>8.0.23</version>
+	</dependency>
+	<!-- javax 3 depencies -->
+	 <dependency>
+        <groupId>javax.xml.bind</groupId>
+        <artifactId>jaxb-api</artifactId>
+        <version>2.3.1</version>
+    </dependency>
+    <dependency>
+        <groupId>com.sun.xml.bind</groupId>
+        <artifactId>jaxb-core</artifactId>
+        <version>2.3.0.1</version>
+    </dependency>
+    <dependency>
+        <groupId>com.sun.xml.bind</groupId>
+        <artifactId>jaxb-impl</artifactId>
+        <version>2.3.2</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+      <plugins>
+        <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.4.0</version>
+        </plugin>
+        <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.3.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.13.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.3.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.4.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>3.1.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>3.1.2</version>
+        </plugin>
+        <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.12.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>3.6.1</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>
+
+
+========================
+Student.java
+===========================
+package com.ait.entity;
+
+public class Student {
+		
+	private Integer sid;
+	private String sname;
+	private String gender;
+	private Integer marks;
+	public Integer getSid() {
+		return sid;
+	}
+	public void setSid(Integer sid) {
+		this.sid = sid;
+	}
+	public String getSname() {
+		return sname;
+	}
+	public void setSname(String sname) {
+		this.sname = sname;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public Integer getMarks() {
+		return marks;
+	}
+	public void setMarks(Integer marks) {
+		this.marks = marks;
+	}
+@Override
+	public String toString() {
+		return "Student [sid=" + sid + ", sname=" + sname + ", gender=" + gender + ", marks=" + marks + "]";
+	}
+}
+
+==========================
+student.hbm.xml
+=========================
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+      "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+      "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.ait.entity.Student" table="TBL_STUDENT">
+        <id name="sid" column="STD"/>
+        <property name="sname" column="SNAME"/>
+        <property name="gender" column="GENDER"/>
+        <property name="marks" column="MARKS"/>
+    </class>
+</hibernate-mapping>
+
+=======================
+hibernate.cfg.xml
+=========================
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+
+        <!-- Database connection settings -->
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/BookServlet</property>
+        <property name="hibernate.connection.username">kambam</property>
+        <property name="hibernate.connection.password">Abc123</property>
+
+
+        <!-- Hibernate dialect -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+
+        <!-- Automatically create/update the database schema -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+	
+	 <!-- mapping resource -->
+	<mapping resource="student.hbm.xml"/>
+    </session-factory>
+</hibernate-configuration>
+
+========================
+StudentDAO.java
+========================
+package com.ait.dao;
+
+import com.ait.entity.Student;
+
+public interface StudentDAO {
+	void saveStudent(Student student);
+	Student loadStudent(int sid);
+	Student updateStudent(int sid,int marks);
+	void deleteStudent(int sid);
+}
+
+========================
+StudentDAOImpl.java
+========================
+package com.ait.dao.impl;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+
+import com.ait.dao.StudentDAO;
+import com.ait.entity.Student;
+public class StudentDAOImpl implements StudentDAO {
+
+	SessionFactory factory; // import org.hibernate.SessionFactory;
+
+	public StudentDAOImpl() {
+	    StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+	            .configure("hibernate.cfg.xml") // Load config from classpath
+	            .build();
+
+	    // Step 2: Create Metadata
+	    Metadata metadata = new MetadataSources(serviceRegistry)
+	            .addAnnotatedClass(com.ait.entity.Student.class) // Register your entity class
+	            .buildMetadata(); 
+	    factory = metadata.getSessionFactoryBuilder().build();
+	}
+	@Override
+	public void saveStudent(Student student) {
+		
+		Session session =factory.openSession();
+		Transaction t=session.beginTransaction();
+		try {
+			session.save(student);
+			System.out.println("Student object is persisted in Database");
+			t.commit();
+		}
+		catch(Exception e)
+		{
+			t.rollback();
+			System.out.println("Tssue in persisting Student object in Database");
+			System.out.println(e);
+		}
+		session.close();
+		factory.close();
+	}
+	public Student loadStudent(int sid)
+	{
+		/*
+		 * load():Lazy loading
+		 * get():early loading
+		 * args: 1.classname.class
+		 *       2. id.value
+		 */
+		Session session =factory.openSession();
+		//Student stu =session.get(Student.class, sid);
+		Student stu =session.load(Student.class, sid);
+		
+		try {
+			Thread.sleep(30000);
+			}
+		catch(Exception e)
+		{
+			
+		}
+		System.out.print(stu.getSname()); //This is not available from in the database 
+		// hence we  are selecting the data from database
+		session.close();
+		return stu;
+		
+	}
+	
+	public Student updateStudent(int sid,int marks)
+	{
+		Session session =factory.openSession();
+		Student s =session.get(Student.class, sid);
+		Transaction t=session.beginTransaction();
+		try {
+			s.setMarks(marks);
+			session.update(s);
+			t.commit();
+			System.out.print("object is updated");
+			}
+		catch(Exception e)
+		{
+			t.rollback();
+			System.out.print("object is not updated ");
+		}
+		return s;
+	}
+	
+	
+	public void deleteStudent(int sid) {
+		Session session =factory.openSession();
+		Student s =session.get(Student.class, sid);
+		Transaction t=session.beginTransaction();
+		try {
+		
+			session.delete(s);
+			t.commit();
+			System.out.print("object is dleted");
+			}
+		catch(Exception e)
+		{
+			t.rollback();
+			System.out.print("object is not delted ");
+		}
+	}
+}
+
+========================
+Tester.java
+========================
+
+package com.ait.client;
+import com.ait.dao.StudentDAO;
+import com.ait.dao.impl.StudentDAOImpl;
+import com.ait.entity.Student;
+public class Tester {
+
+	public static void main(String[] args) {
+	
+		StudentDAO dao=new StudentDAOImpl();
+		/*creating Student object*/
+		Student student =new Student();
+		student.setSid(101);
+		student.setSname("RAHUL");
+		student.setGender("male");
+		student.setMarks(100);
+		dao.saveStudent(student);
+		
+		/*
+		 * Selecting the object 
+		 */
+		
+//		Student stud=dao.loadStudent(101);
+//		System.out.println(stud);
+		
+		/*
+		 * Updating  the object 
+		 */
+//		Student stud=dao.updateStudent(101,500);
+//		System.out.println(stud);
+		
+		/*
+		 * Deleting  the object 
+		 */
+//		dao.deleteStudent(102);
+		
+	}
+
+}
