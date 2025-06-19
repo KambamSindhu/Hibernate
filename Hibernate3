@@ -1,0 +1,357 @@
+=============================
+pom.xml
+===========================
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.ait</groupId>
+  <artifactId>HibernateApplication2</artifactId>
+  <version>1.1</version>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.release>11</maven.compiler.release>
+  </properties>
+
+  <dependencies>
+    <!-- Hibernate Core -->
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>5.6.15.Final</version>
+    </dependency>
+
+    <!-- JPA API -->
+    <dependency>
+      <groupId>javax.persistence</groupId>
+      <artifactId>javax.persistence-api</artifactId>
+      <version>2.2</version>
+    </dependency>
+
+    <!-- MySQL Connector -->
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.23</version>
+    </dependency>
+
+    <!-- JAXB (for Java 11 and above) -->
+    <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+      <version>4.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-core</artifactId>
+      <version>2.3.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <version>2.3.1</version>
+    </dependency>
+
+    <!-- JUnit -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.10.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <version>5.10.2</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.11.0</version>
+        <configuration>
+          <source>11</source>
+          <target>11</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
+
+========================
+persistence.xml
+===========================
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+                                 https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+
+    <persistence-unit name="BookServlet" transaction-type="RESOURCE_LOCAL">
+
+        <!-- Hibernate as JPA provider -->
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <!-- Entity classes (optional if using annotations + classpath scanning) -->
+         <class>com.ait.entity.ProductEntity</class> 
+        
+        <!-- Database connection -->
+        <properties>
+            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/BookServlet"/>
+            <property name="jakarta.persistence.jdbc.user" value="kambam"/>
+            <property name="jakarta.persistence.jdbc.password" value="Abc123"/>
+
+            <!-- Hibernate settings -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+        </properties>
+    </persistence-unit>
+
+</persistence>
+
+
+========================
+ProductEntity.java
+===========================
+package com.ait.entity;
+
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+@Entity
+@Table(name="tbl_products")
+public class ProductEntity {
+
+	@Id
+	@Column(name="product_id")
+	private Integer productId;
+	
+	@Column(name="product_name")
+	private String productName;
+	
+	private Integer quantity;
+	
+	@Column(name="unit_price")
+	private Double unitPrice;
+	
+	@Column(name ="CREATED_ON")
+	@CreationTimestamp
+	private LocalDateTime createdOn;
+	
+	@Column(name ="LASTUPDATED_ON")
+	@UpdateTimestamp
+	private LocalDateTime updatedOn;
+
+	@Override
+	public String toString() {
+		return "ProductEntity [productId=" + productId + ", productName=" + productName + ", quantity=" + quantity
+				+ ", unitPrice=" + unitPrice + ", createdOn=" + createdOn + ", updatedOn=" + updatedOn + "]";
+	}
+
+	public Integer getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Integer productId) {
+		this.productId = productId;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+
+	public Double getUnitPrice() {
+		return unitPrice;
+	}
+
+	public void setUnitPrice(Double unitPrice) {
+		this.unitPrice = unitPrice;
+	}
+
+	public LocalDateTime getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(LocalDateTime createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public LocalDateTime getUpdatedOn() {
+		return updatedOn;
+	}
+
+	public void setUpdatedOn(LocalDateTime updatedOn) {
+		this.updatedOn = updatedOn;
+	}
+	
+	
+	
+}
+
+=======================
+ProductDAO.java
+========================
+package com.ait.dao;
+
+import com.ait.entity.ProductEntity;
+
+public interface ProductDAO {
+    
+	ProductEntity saveProduct(ProductEntity product);
+	
+	ProductEntity loadProductById(Integer productId);
+	
+	ProductEntity updateProductByID(Integer productId ,Double new_Unit_Price);
+	
+	void deleteProductById(Integer productId);
+}
+
+========================
+ProductDAOImpl.java
+========================
+package com.ait.dao.impl;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+
+import com.ait.dao.ProductDAO;
+import com.ait.entity.ProductEntity;
+
+public class ProductDAOImpl implements ProductDAO {
+
+	private EntityManagerFactory factory=
+			Persistence.createEntityManagerFactory("BookServlet");
+	
+	@Override
+	public ProductEntity saveProduct(ProductEntity product) {
+		EntityManager entityManager =factory.createEntityManager();
+		
+		EntityTransaction tx =entityManager.getTransaction();
+		tx.begin();
+		try {
+			entityManager.persist(product);
+			tx.commit();
+			System.out.print("Product is inserted to the database");
+		}
+		catch(Exception e)
+		{
+			tx.rollback();
+			System.out.print("Error in Product insertion to the database");
+		}
+		entityManager.close();
+		return product;
+	}
+
+	@Override
+	public ProductEntity loadProductById(Integer productId) {
+		/*
+		 * find() : early load
+		 * getReference() ; Lazy load
+		 */
+		EntityManager entityManager =factory.createEntityManager();
+		ProductEntity product =entityManager.find(ProductEntity.class, productId);
+		System.out.print(product);
+		entityManager.close();
+		return product;
+	}
+
+	@Override
+	public ProductEntity updateProductByID(Integer productId, Double new_Unit_Price) {
+		// TODO Auto-generated method stub
+		EntityManager entityManager =factory.createEntityManager();
+		ProductEntity p =entityManager.find(ProductEntity.class, productId);
+		EntityTransaction tx =entityManager.getTransaction();
+		tx.begin();
+		p.setUnitPrice(new_Unit_Price);	
+		tx.commit();
+		entityManager.close();
+		return p;
+	}
+
+	@Override
+	public void deleteProductById(Integer productId) {
+		// TODO Auto-generated method stub
+		EntityManager entityManager =factory.createEntityManager();
+		ProductEntity p =entityManager.find(ProductEntity.class, productId);
+		EntityTransaction tx =entityManager.getTransaction();
+		tx.begin();
+		entityManager.remove(p);
+		tx.commit();
+		entityManager.close();
+		
+
+	}
+
+}
+
+========================
+Tester.java
+========================
+
+package com.ait.client;
+
+import com.ait.entity.ProductEntity;
+import com.ait.dao.ProductDAO;
+import com.ait.dao.impl.ProductDAOImpl;
+public class Tester {
+
+	 public static void main(String[] args) {
+	ProductDAO dao=new ProductDAOImpl();
+	/*
+	 * create a new product
+	 */
+//	ProductEntity pEntity=new ProductEntity();
+//	pEntity.setProductId(1234);
+//	pEntity.setProductName("LAPTOP");
+//	pEntity.setQuantity(12);
+//	pEntity.setUnitPrice(3800.0);
+//	
+//	dao.saveProduct(pEntity);
+	
+	/*
+	 * call updateProductById of DAO calss
+	 */
+	
+//	dao.updateProductByID(1234, 104.000);
+	/*
+	 * loadProductById 
+	 */
+	dao.loadProductById(1234);
+	 }
+}
+
+
+}
